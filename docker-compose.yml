@@ -1,0 +1,10 @@
+version: '3'
+services:
+  nagios:
+    image: jasonrivers/nagios:latest
+    hostname: nagios4
+    container_name: nagios4
+    ports:
+      - 8080:80
+    volumes:
+      - './nagios/conf.d:/opt/nagios/etc/conf.d'

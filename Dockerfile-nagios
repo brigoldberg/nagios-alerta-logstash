@@ -1,0 +1,14 @@
+FROM jasonrivers/nagios:latest
+
+RUN apt-get update
+RUN apt-get install -y git curl gcc make libjansson-dev
+RUN apt-get install -y libglib2.0-dev 
+RUN apt-get install -y libcurl4-nss-dev
+
+RUN git clone https://github.com/alerta/nagios-alerta.git
+RUN cd /nagios-alerta;  make nagios4
+RUN cd /nagios-alerta; make install
+
+RUN echo "broker_module=/usr/lib/nagios/alerta-neb.o http://localhost:8080" >> /opt/nagios/etc/nagios.cfg
+
+
