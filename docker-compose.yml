@@ -1,10 +1,33 @@
 version: '3'
 services:
   nagios:
-    image: jasonrivers/nagios:latest
+    image: nagios:4.4.5
     hostname: nagios4
     container_name: nagios4
     ports:
-      - 8080:80
+      - 8000:80
     volumes:
       - './nagios/conf.d:/opt/nagios/etc/conf.d'
+
+  alerta:
+    image: alerta/alerta-web:7.5.1
+    hostname: alerta
+    container_name: alerta
+    ports: 
+      - 8080:8080
+    environment:
+      - DATABASE_URL=mongodb://alerta-db:27017/monitoring
+      - PLUGINS=logstash
+      - AUTH_REQUIRED=False
+
+  alerta-db:
+    image: mongo:latest
+    hostname: alerta-db
+    container_name: alerta-db
+
+  logstash:
+    image: logstash:7.6.2
+    hostname: logstash
+    container_name: logstash
+    volumes:
+      - './logstash:/usr/share/logstash/pipeline'
